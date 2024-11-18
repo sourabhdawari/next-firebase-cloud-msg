@@ -5,11 +5,14 @@ import { saveUserToken } from '../utils/notifications';
 interface NotificationRequestButtonProps {
   userId: string;
   className?: string;
+  onTokenReceived?: (token: string) => void;
 }
+
 
 const NotificationRequestButton: FC<NotificationRequestButtonProps> = ({ 
   userId, 
-  className = ''
+  className = '',
+  onTokenReceived 
 }) => {
   const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -22,6 +25,7 @@ const NotificationRequestButton: FC<NotificationRequestButtonProps> = ({
         if (result.success) {
           setIsSubscribed(true);
           setError(null);
+          onTokenReceived?.(token); // Add this line to pass token up
         } else {
           setError(result.error || 'Failed to enable notifications');
         }
