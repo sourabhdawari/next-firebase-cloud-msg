@@ -1,51 +1,56 @@
 import { FC, useState } from 'react';
-import { requestNotificationPermission } from '../firebase/messaging';
-import { saveUserToken } from '../utils/notifications';
+import { getToken } from 'firebase/messaging';
+import { messaging } from '../firebase/firebase';
+import { saveToken } from '../services/tokenService';
 
 interface NotificationRequestButtonProps {
-  userId: string;
-  className?: string;
-  onTokenReceived?: (token: string) => void;
+  onSuccess?: () => void;
 }
 
-
 const NotificationRequestButton: FC<NotificationRequestButtonProps> = ({ 
-  userId, 
-  className = '',
-  onTokenReceived 
+  onSuccess 
 }) => {
-  const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [status, setStatus] = useState<string>('');
 
-  const handleSubscribe = async (): Promise<void> => {
+  const requestPermission = async () => {
     try {
-      const token = await requestNotificationPermission();
+      setStatus('Requesting permission...');
+      
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') {
+        setStatus('Notification permission denied');
+        return;
+      }
+
+      if (!messaging) {
+        setStatus('Firebase messaging not initialized');
+        return;
+      }
+
+      const token = await getToken(messaging, {
+        vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY
+      });
+
       if (token) {
-        const result = await saveUserToken(userId, token);
-        if (result.success) {
-          setIsSubscribed(true);
-          setError(null);
-          onTokenReceived?.(token); // Add this line to pass token up
-        } else {
-          setError(result.error || 'Failed to enable notifications');
-        }
+        await saveToken(token);
+        setStatus('Notifications enabled successfully!');
+        onSuccess?.();
       }
     } catch (error) {
-      console.error('Error subscribing to notifications:', error);
-      setError('Failed to subscribe to notifications');
+      console.error('Error:', error);
+      setStatus('Failed to enable notifications');
     }
   };
 
   return (
     <div>
       <button
-        onClick={handleSubscribe}
-        className={`px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50 ${className}`}
-        disabled={isSubscribed}
+        onClick={requestPermission}
+        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
       >
-        {isSubscribed ? 'Notifications Enabled' : 'Enable Notifications'}
+        Enable Notifications
       </button>
-      {error && <p className="text-red-500 mt-2">{error}</p>}
+      {status && <p className="mt-2">{status}</p>}
     </div>
   );
 };

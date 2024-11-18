@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getMessaging, Messaging } from 'firebase/messaging';
 import { FirebaseConfig } from '../types';
-
+import { getFirestore } from 'firebase/firestore';
 const firebaseConfig = {
   apiKey: "AIzaSyD8T29St_SmtqB6WCWCoP8wJVwYjZLgvIQ",
   authDomain: "styava-demo.firebaseapp.com",
@@ -14,3 +14,4 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 export const messaging: Messaging | null = typeof window !== 'undefined' ? getMessaging(app) : null;
+export const db = getFirestore(app);
