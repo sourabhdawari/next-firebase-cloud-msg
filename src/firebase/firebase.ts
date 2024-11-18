@@ -1,10 +1,11 @@
 import { initializeApp } from 'firebase/app';
 import { getMessaging, Messaging } from 'firebase/messaging';
 import { FirebaseConfig } from '../types';
-import { getFirestore } from 'firebase/firestore';
+import { getDatabase } from 'firebase/database';
 const firebaseConfig = {
   apiKey: "AIzaSyD8T29St_SmtqB6WCWCoP8wJVwYjZLgvIQ",
   authDomain: "styava-demo.firebaseapp.com",
+  databaseURL: "https://styava-demo-default-rtdb.firebaseio.com",
   projectId: "styava-demo",
   storageBucket: "styava-demo.firebasestorage.app",
   messagingSenderId: "386224950059",
@@ -14,4 +15,4 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 export const messaging: Messaging | null = typeof window !== 'undefined' ? getMessaging(app) : null;
-export const db = getFirestore(app);
+export const db = getDatabase(app);

@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { requestNotificationPermission } from '../utils/firebase/firebase';
+import { db } from '../firebase/firebase';
+import { ref, update } from 'firebase/database';
 
 interface NotificationSetupState {
   permission: NotificationPermission;
@@ -39,13 +41,7 @@ export const useNotificationSetup = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ token })
           });
-
-          setState({
-            permission: 'granted',
-            token,
-            error: null,
-            loading: false
-          });
+         
         }
       } else {
         setState({

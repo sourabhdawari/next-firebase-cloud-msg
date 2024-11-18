@@ -4,6 +4,7 @@ importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compa
 firebase.initializeApp({
   apiKey: "AIzaSyD8T29St_SmtqB6WCWCoP8wJVwYjZLgvIQ",
   authDomain: "styava-demo.firebaseapp.com",
+  databaseURL: "https://styava-demo-default-rtdb.firebaseio.com",
   projectId: "styava-demo",
   storageBucket: "styava-demo.firebasestorage.app",
   messagingSenderId: "386224950059",

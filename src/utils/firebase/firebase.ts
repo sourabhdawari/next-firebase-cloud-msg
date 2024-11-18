@@ -2,12 +2,14 @@ import { initializeApp, getApps } from 'firebase/app';
 import { getMessaging, Messaging, GetTokenOptions, MessagePayload, onMessage, getToken } from 'firebase/messaging';
 
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
+  apiKey: "AIzaSyD8T29St_SmtqB6WCWCoP8wJVwYjZLgvIQ",
+  authDomain: "styava-demo.firebaseapp.com",
+  databaseURL: "https://styava-demo-default-rtdb.firebaseio.com",
+  projectId: "styava-demo",
+  storageBucket: "styava-demo.firebasestorage.app",
+  messagingSenderId: "386224950059",
+  appId: "1:386224950059:web:adfdae0a9a58489580936e",
+  measurementId: "G-WDC95VSV4Q"
 };
 
 let messaging: Messaging | null = null;
