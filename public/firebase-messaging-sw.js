@@ -13,55 +13,12 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage(function(payload) {
+messaging.onBackgroundMessage((payload) => {
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
     icon: '/icon.png'
   };
 
-  return self.registration.showNotification(notificationTitle, notificationOptions);
+  self.registration.showNotification(notificationTitle, notificationOptions);
 });
-
-// src/utils/firebase.js
-import { initializeApp } from 'firebase/app';
-import { getMessaging, getToken, onMessage } from 'firebase/messaging';
-
-const firebaseConfig = {
-  apiKey: "your-api-key",
-  authDomain: "your-auth-domain",
-  projectId: "your-project-id",
-  messagingSenderId: "your-messaging-sender-id",
-  appId: "your-app-id"
-};
-
-const app = initializeApp(firebaseConfig);
-
-export const requestNotificationPermission = async () => {
-  try {
-    const messaging = getMessaging(app);
-    const permission = await Notification.requestPermission();
-    
-    if (permission === 'granted') {
-      const token = await getToken(messaging, {
-        vapidKey: 'your-vapid-key'
-      });
-      
-      // Send this token to your server to store it for the user
-      console.log('FCM Token:', token);
-      return token;
-    }
-  } catch (error) {
-    console.error('Notification permission error:', error);
-  }
-};
-
-export const onMessageListener = () => {
-  const messaging = getMessaging(app);
-  
-  return new Promise((resolve) => {
-    onMessage(messaging, (payload) => {
-      resolve(payload);
-    });
-  });
-};
